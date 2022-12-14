@@ -20,7 +20,7 @@ public class JDBCInsertMYSQL {
         // 建立了连接
         Connection connection = dataSource.getConnection();
         // 写SQL语句
-        String SQL1 = "create table student(ID int primary key auto_increment , name varchar(20) , status int , zhuanYe int , classes int ,)";
+        String SQL1 = "create table student(ID int primary key auto_increment , name varchar(20) , status int , zhuanYe int , classes int )";
         // 做一下准备
         PreparedStatement statement = connection.prepareStatement(SQL1);
         int ret1 = statement.executeUpdate();
@@ -63,11 +63,11 @@ public class JDBCInsertMYSQL {
         // 建立了连接
         Connection connection = dataSource.getConnection();
         // 写SQL语句
-        String SQL3 = "create table COURSE(ID int ,course_name varchar(20), score decimal(3,1))";
-        String SQL4 = "insert into COURSE values(1 , '计算机组成原理')";
-        String SQL5 = "insert into COURSE values(2 , '计算机网络')";
-        String SQL6 = "insert into COURSE values(3 , '数据结构与算法')";
-        String SQL7 = "insert into COURSE values(4 , '数据库原理')";
+        String SQL3 = "create table COURSE(ID int primary key auto_increment ,course_name varchar(20), score decimal(3,1))";
+        String SQL4 = "insert into COURSE values(1 , '计算机组成原理' , null)";
+        String SQL5 = "insert into COURSE values(2 , '计算机网络' , null)";
+        String SQL6 = "insert into COURSE values(3 , '数据结构与算法' , null)";
+        String SQL7 = "insert into COURSE values(4 , '数据库原理' , null)";
         String SQL8 = "select * from COURSE";
         // 做一下准备
         PreparedStatement statement3 = connection.prepareStatement(SQL3);
@@ -249,10 +249,8 @@ public class JDBCInsertMYSQL {
             int status = resultSet.getInt(3);
             int zhuanYe = resultSet.getInt(4);
             int classes = resultSet.getInt(5);
-            String course = resultSet.getString(6);
-            BigDecimal score = resultSet.getBigDecimal(7);
-            System.out.println("studentID: "+ studentID+ " " + "studentName: " + studentName + " " +"status: "+ status + " " +
-                    "zhuanYe: " + zhuanYe + " " +"classes: "+ classes + " ");
+            System.out.println("studentID: "+ studentID+ "//" + "studentName: " + studentName + "//" +"status: "+ status + "//" +
+                    "zhuanYe: " + zhuanYe + "//" +"classes: "+ classes + "//");
         }
         statement.close();
         connection.close();
@@ -304,8 +302,7 @@ public class JDBCInsertMYSQL {
         while(resultSet.next()) {
             int ID = resultSet.getInt(1);
             String name = resultSet.getString(2);
-            BigDecimal bigDecimal = resultSet.getBigDecimal(3);
-            System.out.println(" " + ID + " " + name + " " + bigDecimal);
+            System.out.println(" " + ID + " " + name + " " );
         }
         // 断开数据库
         statement8.close();
@@ -419,20 +416,144 @@ public class JDBCInsertMYSQL {
      */
     public void getFullTable() throws SQLException {
         DataSource dataSource = new MysqlDataSource();
-        ((MysqlDataSource)dataSource).setURL("jdbc:mysql://127.0.0.1:3306/student_menerge?characterEncoding=utf8&&useSSL=false");
-        ((MysqlDataSource)dataSource).setUser("root");
-        ((MysqlDataSource)dataSource).setPassword("171612cgj");
+        ((MysqlDataSource) dataSource).setURL("jdbc:mysql://127.0.0.1:3306/student_menerge?characterEncoding=utf8&&useSSL=false");
+        ((MysqlDataSource) dataSource).setUser("root");
+        ((MysqlDataSource) dataSource).setPassword("171612cgj");
         // 建立了连接
         Connection connection = dataSource.getConnection();
-        String SQL = "select stduent.ID , student.name , stduent.status , student.zhuanYe , student.classes , " +
+        String SQL = "select student.ID , student.name , student.status , student.zhuanYe , student.classes , " +
                 "COURSE.course_name, COURSE.score from student,COURSE,studentID_course_ID " +
                 "where student.ID = studentID_course_ID.student_ID and studentID_course_ID.course_ID = COURSE.ID";
         PreparedStatement statement = connection.prepareStatement(SQL);
         ResultSet resultSet = statement.executeQuery();
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             int studentID = resultSet.getInt(1);
             String studentName = resultSet.getString(2);
             int studentStatus = resultSet.getInt(3);
-            int
+            int studentzhuanYe = resultSet.getInt(4);
+            int studentClasses = resultSet.getInt(5);
+            String courseName = resultSet.getString(6);
+            BigDecimal courseScore = resultSet.getBigDecimal(7);
+            System.out.println("studentID: " + studentID +"//" + "studentName: " + studentName + "//" +  "studentStatus: " + studentStatus + "//" + "studentzhuanYe: " + studentzhuanYe
+                    +"//" + "studentClasses: " + studentClasses + "//" + "courseName: " + courseName +"//" +  "courseScore: " + courseScore+ "//" );
         }
+    }
+
+    /**
+     * 获取打分前的个人信息表
+     */
+    public void getScoreTable(int studentsID) throws SQLException {
+        DataSource dataSource = new MysqlDataSource();
+        ((MysqlDataSource) dataSource).setURL("jdbc:mysql://127.0.0.1:3306/student_menerge?characterEncoding=utf8&&useSSL=false");
+        ((MysqlDataSource) dataSource).setUser("root");
+        ((MysqlDataSource) dataSource).setPassword("171612cgj");
+        // 建立了连接
+        Connection connection = dataSource.getConnection();
+        String SQL = "select student.ID STUID, student.status STUSTATUS, student.name STUNAME, COURSE.course_name COURNAME" +
+                "from student , COURSE , studentID_course_ID" +
+                "where student.ID = ? and student.ID = studentID_course_ID.student_ID and studentID_course_ID.course_ID = COURSE.ID ";
+        PreparedStatement statement = connection.prepareStatement(SQL);
+        statement.setInt(1,studentsID);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int studentID = resultSet.getInt(1);
+            String studentName = resultSet.getString(3);
+            int studentStatus = resultSet.getInt(2);
+            String courseName = resultSet.getString(4);
+            System.out.println("studentID: " + studentID +"//" + "studentName: " + studentName + "//" +  "studentStatus: " + studentStatus + "//"
+                    +"//" + "courseName: " + courseName +"//" );
+        }
+    }
+    /**
+     * 打分
+     */
+    public void insertIntoScore(int stduentID, int courseID , BigDecimal scores) throws SQLException {
+        DataSource dataSource = new MysqlDataSource();
+        ((MysqlDataSource) dataSource).setURL("jdbc:mysql://127.0.0.1:3306/student_menerge?characterEncoding=utf8&&useSSL=false");
+        ((MysqlDataSource) dataSource).setUser("root");
+        ((MysqlDataSource) dataSource).setPassword("171612cgj");
+        // 建立了连接
+        Connection connection = dataSource.getConnection();
+        String Sql = "update COURSE set COURSE.score = ? where studentID_course_ID.studentID = ? and studentID_course_ID.course_ID = ? ";
+        PreparedStatement statement = connection.prepareStatement(Sql);
+        statement.setBigDecimal(1,scores);
+        statement.setInt(2,stduentID);
+        statement.setInt(3,courseID);
+        int ret = statement.executeUpdate();
+        System.out.println("设置成功");
+        statement.close();
+        connection.close();
+    }
+
+    /**
+     * 插入课程
+     */
+    public void insertIntoCOURSE(int courseid, String coursename) throws SQLException {
+        DataSource dataSource = new MysqlDataSource();
+        ((MysqlDataSource) dataSource).setURL("jdbc:mysql://127.0.0.1:3306/student_menerge?characterEncoding=utf8&&useSSL=false");
+        ((MysqlDataSource) dataSource).setUser("root");
+        ((MysqlDataSource) dataSource).setPassword("171612cgj");
+        // 建立了连接
+        Connection connection = dataSource.getConnection();
+        String Sql = "insert into COURSE (ID , course_name) values(?,?)";
+        PreparedStatement statement = connection.prepareStatement(Sql);
+        statement.setInt(1, courseid);
+        statement.setString(2, coursename);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+    /**
+     * 管理专业
+     */
+    public void insertIntoZHUANYE(int zhuanYeid, String zhuanYename) throws SQLException {
+        DataSource dataSource = new MysqlDataSource();
+        ((MysqlDataSource) dataSource).setURL("jdbc:mysql://127.0.0.1:3306/student_menerge?characterEncoding=utf8&&useSSL=false");
+        ((MysqlDataSource) dataSource).setUser("root");
+        ((MysqlDataSource) dataSource).setPassword("171612cgj");
+        // 建立了连接
+        Connection connection = dataSource.getConnection();
+        String Sql = "insert into zhuanYe (ID , zhuanYe_name) values(?,?)";
+        PreparedStatement statement = connection.prepareStatement(Sql);
+        statement.setInt(1, zhuanYeid);
+        statement.setString(2, zhuanYename);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
+
+    /**
+     * 插入班级
+     */
+    public void insertIntoCLASSES(int zhuanYeID, int classesID, String classesNAME) throws SQLException {
+        DataSource dataSource = new MysqlDataSource();
+        ((MysqlDataSource) dataSource).setURL("jdbc:mysql://127.0.0.1:3306/student_menerge?characterEncoding=utf8&&useSSL=false");
+        ((MysqlDataSource) dataSource).setUser("root");
+        ((MysqlDataSource) dataSource).setPassword("171612cgj");
+        // 建立了连接
+        Connection connection = dataSource.getConnection();
+        String Sql = "insert into classes(ID , classes_name , zhuanYe_ID) values(?,?,?)";
+        PreparedStatement statement = connection.prepareStatement(Sql);
+        statement.setInt(1, classesID);
+        statement.setString(2, classesNAME);
+        statement.setInt(3,zhuanYeID);
+        statement.executeUpdate();
+        statement.close();
+        connection.close();
+    }
 }
+
+
+
+
+// student.ID , student.status , student.name , COURSE.course_name
+
+
+
+
+
+
+
+
+

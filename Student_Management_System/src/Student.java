@@ -47,7 +47,7 @@ public class Student {
                     jdbcInsertMYSQL.getStudent();
                     break;
                 case 2:
-                    jdbcInsertMYSQL.courses_table();
+                    jdbcInsertMYSQL.getCourse();
                     jdbcInsertMYSQL.getStudent();
                     System.out.println("请输入你要操作的次数");
                     int count = scanner.nextInt();

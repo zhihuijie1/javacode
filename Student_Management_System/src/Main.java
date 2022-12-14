@@ -32,6 +32,8 @@ public class Main {
                     break;
                 case 3:
                     log();
+                    System_administrator system_administrator = new System_administrator();
+                    system_administrator.menu();
                     break;
                 case 4:
                     break;
