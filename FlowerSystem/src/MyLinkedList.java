@@ -66,7 +66,7 @@ public class MyLinkedList<V> {
     public boolean contains(V key) {
         ListNode<V> cur = head;
         while(cur != null) {
-            if(cur.val == key) {
+            if(cur.val.equals(key)) {
                 return true;
             }
             cur = cur.next;
@@ -170,7 +170,7 @@ public class MyLinkedList<V> {
         ListNode<V> cur = head;
         int index = 0;
         while(cur != null) {
-            if(cur.val == key) {
+            if(cur.val.equals(key)) {
                 return index;
             }
             index++;
