@@ -1,97 +1,46 @@
-package P1.package2;
+package P1.package3;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 public class Test4 {
-    // 属性
-    private String name;
-    private int age;
-    private String sex;
-    // 方法
-    public String getName() {
-        return name;
-    }
+    public static void main(String[] args) {
+        String str1 = "abcdef";
+        String str2 = "abcdef";
+        System.out.println(str1 == str2);
+        System.out.println(str1.equals(str2));
+        str1.replace('a', 'u');
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public int getAge() {
-        return age;
-    }
+        String s1 = "abcdefg";
+        String[] s2 = s1.split("-");
+        int[] a = {1,2,3,45};
+        System.out.println(Arrays.toString(s2));
+        System.out.println(a);
+        StringBuilder stringBuilder = new StringBuilder();
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+        System.out.println("-------------------------------");
+        String z = new String("abcdef");
+        char y = z.charAt(1);
+        System.out.println(y);
+        System.out.println("-------------------------------");
+        String s = "abcdefghigklmnopqrst";
+        System.out.println(s.substring(5));
+        System.out.println(s.substring(3,8));
+        System.out.println(s.concat("ppp"));
 
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) throws Exception {
-        if(sex == "男" || sex == "女") {
-            this.sex = sex;
-        }else {
-            // 制造运行时异常
-            //throw new RuntimeException("性别不对！");
-            // 制造检查异常
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // 甩锅法
-            throw new Exception();
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Test4{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", sex='" + sex + '\'' +
-                '}';
-    }
-
-    public Test4() {
-    }
-
-    public Test4(String name, int age, String sex) throws Exception {
-        this.name = name;
-        this.age = age;
-        /*
-        try {
-            this.setSex(sex);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-        this.setSex(sex);
-    }
-
-    //内部类
-    static class text5 {
-        public static void main(String[] args) throws Exception {
-            Test4 t1 = new Test4();
-            try {
-                t1.setSex("sdasd");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Test4 t2 = new Test4("asd",10,"sdas");
-        }
-
-    }
-
-    public void eat() throws RuntimeException {
-        System.out.println("父类的方法");
+        String str = "a-b-c-d-e-f-g-h-i-k";
+        String[] nub1 = str.split("-");
+        System.out.println(Arrays.toString(nub1));
+        String str3 = "    a c n u   ";
+        String[] nub2 = str3.split(" ");
+        System.out.println(Arrays.toString(nub2));
+        String str4 = "abc cba mba obuuu";
+        String[] nub3 = str4.split("b");
+        System.out.println(Arrays.toString(nub3));
+        System.out.println(str.toUpperCase());
+        System.out.println(str3.toString());
+        char[] arr = {98,99,100};
+        System.out.println(String.valueOf(arr));
     }
 }
-
-class Test6 extends Test4 {
-    @Override
-    public void eat() throws Exception {
-        super.eat();
-    }
-}
-
-
